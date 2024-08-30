@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Spin The Bottle</title>
+</head>
+<body>
+<h1>Spin The Bottle</h1>
+<form id="player-form">
+    <label for="player-name">Enter player name</label>
+    <input type="text" id="player-name" placeholder="Player name" required>
+    <button type="submit" id="add-player">Add player</button>
+</form>
+<p id="status">Add players to spin the bottle.</p>
+<ul id="players"></ul>
+<button id="spin">Spin</button>
+<script>
+
+    document.getElementById('player-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var input = document.getElementById('player-name');
+        var playerName = input.value.trim();
+        var status = document.getElementById('status');
+        var playersList = document.getElementById('players');
+        var existingPlayers = Array.from(playersList.children).map(li => li.textContent);
+
+        if (playerName === '') {
+            status.textContent = 'Player name cannot be empty!';
+            return;
+        }
+
+        if (existingPlayers.includes(playerName)) {
+            status.textContent = 'Player already exists!';
+            return;
+        }
+
+        var newPlayer = document.createElement('li');
+        newPlayer.textContent = playerName;
+        playersList.appendChild(newPlayer);
+
+        input.value = '';
+        status.textContent = 'Player added!';
+    });
+
+
+    document.getElementById('spin').addEventListener('click', function() {
+        var status = document.getElementById('status');
+        var players = document.querySelectorAll('#players li');
+
+        if (players.length === 0) {
+            status.textContent = 'No players to spin!';
+            return;
+        }
+
+        status.textContent = 'Spinning...';
+
+        setTimeout(function() {
+
+            var randomIndex = Math.floor(Math.random() * players.length);
+            var selectedPlayer = players[randomIndex].textContent;
+
+            status.textContent = 'Selected: ' + selectedPlayer;
+        }, 2000);
+    });
+</script>
+</body>
+</html>
